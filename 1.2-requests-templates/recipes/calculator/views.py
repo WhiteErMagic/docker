@@ -28,3 +28,20 @@ DATA = {
 #     'ингредиент2': количество2,
 #   }
 # }
+
+
+def index(request):
+    template_name = 'calculator/index.html'
+    return render(request, template_name)
+
+
+def get_recipe(request, dish):
+    template_name = 'calculator/index.html'
+    cur_dish = DATA.get(dish, {})
+    amount = int(request.GET.get("servings", 1))
+    recipe = {}
+    if len(cur_dish) > 0:
+        for key, val in cur_dish.items():
+            recipe[key] = val * amount
+
+    return render(request, template_name, context={'recipe': recipe})
