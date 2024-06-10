@@ -18,5 +18,14 @@
             </div>
             {% endfor %}
         </div>
+        {% if page.has_previous %}
+            <a class="button disabled" href=""><</a>
+            <a class="button button-primary" href={% url 'bookspage' page_prev %}>{{ page_prev }}</a>
+        {% endif %}
+        {% if page.has_next %}
+            <a class="button button-primary" href={% url 'bookspage' page_next %}>{{ page_next }}</a>
+            <a class="button disabled" href="">></a>
+        {% endif %}
+
     </div>
 {% endblock %}
