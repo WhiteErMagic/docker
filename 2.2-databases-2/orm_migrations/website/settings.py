@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+from django.conf.global_settings import INTERNAL_IPS
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,6 +29,8 @@ ALLOWED_HOSTS = []
 SITE_ID = 1
 
 
+INTERNAL_IPS = ['127.0.0.1']
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -36,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'school',
 ]
 
@@ -47,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'website.urls'
@@ -76,6 +82,8 @@ DATABASES = {
         'NAME': 'netology_orm_migrations',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': '1234'
     }
 }
 
