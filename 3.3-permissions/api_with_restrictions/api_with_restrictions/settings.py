@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,7 +81,18 @@ TEMPLATES = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '20/day',
+        'user': '10/day'
+    }
 }
 
 WSGI_APPLICATION = 'api_with_restrictions.wsgi.application'
@@ -89,8 +105,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'netology_classified_ads',
-        'HOST': '127.0.0.1',
+        'HOST': 'localhost',
         'PORT': '5432',
+        'USER': os.getenv(key='USER'),
+        'PASSWORD': os.getenv(key='PASSWORD'),
     }
 }
 
