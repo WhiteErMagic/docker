@@ -42,7 +42,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
         if data.get('status') is None:
             q = Advertisement.objects.all().filter(creator_id=self.context["request"].user.id, status='OPEN')
-            if len(q) == 10:
+            if len(q) >= 10:
                  raise serializers.ValidationError({'error': 'you have 10 opened advertisements'})
 
         return data
