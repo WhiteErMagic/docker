@@ -30,6 +30,7 @@ def course_factory():
         return baker.make("Course", **kwargs)
     return factory
 
+
 def test_example():
     assert False, "Just test example"
 
@@ -43,6 +44,7 @@ def test_retrieve(course_factory, api_client):
     course_get = api_client.get('/api/v1/courses/')
 
     # Assert
+    assert course_get.status_code == 200
     assert course_get.data[0]['id'] == course.id
 
 
@@ -57,6 +59,7 @@ def test_list(course_factory, api_client):
     res_set = set([v['id'] for v in course_get.data])
 
     # Assert
+    assert course_get.status_code == 200
     assert res_set == set_course_id
 
 
@@ -70,6 +73,7 @@ def test_id(course_factory, api_client):
     course_get = api_client.get('/api/v1/courses/', {'id':5})
 
     # Assert
+    assert course_get.status_code == 200
     assert course_get.data[0]['id'] == dict_course[5].id
 
 
@@ -83,6 +87,7 @@ def test_name(course_factory, api_client):
     course_get = api_client.get('/api/v1/courses/', {'name': name_course})
 
     # Assert
+    assert course_get.status_code == 200
     assert course_get.data[0]['name'] == name_course
 
 
