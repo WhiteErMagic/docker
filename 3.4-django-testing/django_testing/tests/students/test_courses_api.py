@@ -90,7 +90,7 @@ def test_create_course(api_client):
 
 @pytest.mark.usefixtures("api_client")
 @pytest.mark.django_db
-def test_create_course(api_client):
+def test_update_course(api_client):
     # Arrange
     course = {'name': 'course222'}
     course_update = {'name': 'course555'}
