@@ -15,7 +15,6 @@ def test_example():
     assert False, "Just test example"
 
 
-@pytest.mark.usefixtures("course_factory", "api_client")
 @pytest.mark.django_db
 def test_retrieve(course_factory, api_client):
     # Arrange
@@ -29,7 +28,6 @@ def test_retrieve(course_factory, api_client):
     assert course_get.data[0]['id'] == course.id
 
 
-@pytest.mark.usefixtures("course_factory", "api_client")
 @pytest.mark.django_db
 def test_list(course_factory, api_client):
     # Arrange
@@ -45,7 +43,6 @@ def test_list(course_factory, api_client):
     assert res_set == set_course_id
 
 
-@pytest.mark.usefixtures("course_factory", "api_client")
 @pytest.mark.django_db
 def test_id(course_factory, api_client):
     # Arrange
@@ -60,7 +57,6 @@ def test_id(course_factory, api_client):
     assert course_get.data[0]['id'] == dict_course[5].id
 
 
-@pytest.mark.usefixtures("course_factory", "api_client")
 @pytest.mark.django_db
 def test_name(course_factory, api_client):
     # Arrange
@@ -75,7 +71,6 @@ def test_name(course_factory, api_client):
     assert course_get.data[0]['name'] == name_course
 
 
-@pytest.mark.usefixtures("api_client")
 @pytest.mark.django_db
 def test_create_course(api_client):
     # Arrange
@@ -88,22 +83,19 @@ def test_create_course(api_client):
     assert course_post.status_code == 201 and course_post.data['name'] == 'course222'
 
 
-@pytest.mark.usefixtures("api_client")
 @pytest.mark.django_db
-def test_update_course(api_client):
+def test_update_course(api_client, course_factory):
     # Arrange
-    course = {'name': 'course222'}
+    course = course_factory(_quantity=1, name='course222')
     course_update = {'name': 'course555'}
-    factory = APIRequestFactory()
 
     # Act
-    course_post = api_client.post('/api/v1/courses/', data=course)
-    course_ob = Course.objects.get(pk=course_post.data['id'])
+    course_ob = Course.objects.get(pk=course[0].id)
     serializer_update = CourseSerializer(course_ob, data=course_update)
 
     if serializer_update.is_valid():
         serializer_update.save()
-        course_ob = Course.objects.get(pk=course_post.data['id'])
+        course_ob = Course.objects.get(pk=course[0].id)
         res = Response(serializer_update.data, status=status.HTTP_200_OK)
     else:
         res = Response(serializer_update.errors, status=status.HTTP_400_BAD_REQUEST)
