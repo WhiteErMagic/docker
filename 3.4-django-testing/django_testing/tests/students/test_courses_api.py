@@ -11,30 +11,11 @@ from students.serializers import CourseSerializer
 from students.models import Course
 
 
-@pytest.fixture
-def api_client():
-    """Фикстура для клиента API."""
-    return APIClient()
-
-
-@pytest.fixture
-def student_factory():
-    def factory(**kwargs):
-        return baker.make("Student", **kwargs)
-    return factory
-
-
-@pytest.fixture
-def course_factory():
-    def factory(**kwargs):
-        return baker.make("Course", **kwargs)
-    return factory
-
-
 def test_example():
     assert False, "Just test example"
 
 
+@pytest.mark.usefixtures("course_factory", "api_client")
 @pytest.mark.django_db
 def test_retrieve(course_factory, api_client):
     # Arrange
@@ -48,6 +29,7 @@ def test_retrieve(course_factory, api_client):
     assert course_get.data[0]['id'] == course.id
 
 
+@pytest.mark.usefixtures("course_factory", "api_client")
 @pytest.mark.django_db
 def test_list(course_factory, api_client):
     # Arrange
@@ -63,6 +45,7 @@ def test_list(course_factory, api_client):
     assert res_set == set_course_id
 
 
+@pytest.mark.usefixtures("course_factory", "api_client")
 @pytest.mark.django_db
 def test_id(course_factory, api_client):
     # Arrange
@@ -77,6 +60,7 @@ def test_id(course_factory, api_client):
     assert course_get.data[0]['id'] == dict_course[5].id
 
 
+@pytest.mark.usefixtures("course_factory", "api_client")
 @pytest.mark.django_db
 def test_name(course_factory, api_client):
     # Arrange
@@ -91,6 +75,7 @@ def test_name(course_factory, api_client):
     assert course_get.data[0]['name'] == name_course
 
 
+@pytest.mark.usefixtures("api_client")
 @pytest.mark.django_db
 def test_create_course(api_client):
     # Arrange
@@ -103,6 +88,7 @@ def test_create_course(api_client):
     assert course_post.status_code == 201 and course_post.data['name'] == 'course222'
 
 
+@pytest.mark.usefixtures("api_client")
 @pytest.mark.django_db
 def test_create_course(api_client):
     # Arrange
@@ -127,6 +113,7 @@ def test_create_course(api_client):
     assert course_ob.name == 'course555'
 
 
+@pytest.mark.usefixtures("api_client")
 @pytest.mark.django_db
 def test_delete_course(api_client):
     # Arrange
