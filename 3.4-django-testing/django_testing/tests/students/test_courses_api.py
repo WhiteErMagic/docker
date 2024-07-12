@@ -88,24 +88,17 @@ def test_update_course(api_client, course_factory):
     # Arrange
     course = course_factory(_quantity=1, name='course222')
     course_update = {'name': 'course555'}
+    BASE_URL = '/api/v1/courses/'
 
     # Act
-    course_ob = Course.objects.get(pk=course[0].id)
-    serializer_update = CourseSerializer(course_ob, data=course_update)
 
-    if serializer_update.is_valid():
-        serializer_update.save()
-        course_ob = Course.objects.get(pk=course[0].id)
-        res = Response(serializer_update.data, status=status.HTTP_200_OK)
-    else:
-        res = Response(serializer_update.errors, status=status.HTTP_400_BAD_REQUEST)
+    res = api_client.patch(f'{BASE_URL}{course[0].id}/', data=course_update)
 
     # Assert
     assert res.status_code == 200
-    assert course_ob.name == 'course555'
+    assert res.data['name'] == 'course555'
 
 
-@pytest.mark.usefixtures("api_client")
 @pytest.mark.django_db
 def test_delete_course(api_client):
     # Arrange
